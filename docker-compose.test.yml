@@ -2,25 +2,6 @@ version: '2'
 
 services:
 
-  sut:
-    build: ./tests/
-    depends_on:
-      - vote
-      - result
-      - worker
-    networks:
-      - front-tier
-
-  vote:
-    build: ../vote/
-    ports: ["80"]
-    depends_on:
-      - redis
-      - db
-    networks:
-      - front-tier
-      - back-tier
-
   result:
     build: .
     ports: ["80"]
@@ -29,14 +10,6 @@ services:
       - db
     networks:
       - front-tier
-      - back-tier
-
-  worker:
-    build: ../worker/
-    depends_on:
-      - redis
-      - db
-    networks:
       - back-tier
 
   redis:
