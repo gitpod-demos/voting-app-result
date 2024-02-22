@@ -4,17 +4,14 @@ services:
 
   result:
     build: .
-    ports: ["80"]
+    ports:
+      - "5001:80"
+      - "5858:5858"
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
     networks:
       - front-tier
-      - back-tier
-
-  redis:
-    image: redis:alpine
-    networks:
       - back-tier
 
   db:
@@ -23,9 +20,15 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     volumes:
-      - "db-data:/var/lib/postgresql/data"
+      - "./:/app"
+      - "./healthchecks:/healthchecks"
     networks:
       - back-tier
+    healthcheck:
+      test: /healthchecks/postgres.sh
+      interval: "5s"
+
+  # TODO: seed data, w/o using the voting api, which is what the mono repo does
 
 volumes:
   db-data:
