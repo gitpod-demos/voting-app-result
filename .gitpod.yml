@@ -1,4 +1,4 @@
 tasks:
-  name: Test
-  command: |
-    docker compose -f docker-compose.test.yml up
+  - name: Test
+    command: |
+      docker compose -f docker-compose.test.yml up
